@@ -1,0 +1,6 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Employee
+
+def dashboard(request):
+    employees = Employee.objects.all()
+    return render(request, 'employees/dashboard.html', {'employees': employees})
