@@ -6,9 +6,14 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect  # ✅ Add this line
+
+import logging
+
+
 from .models import UserTime, AccessRequest
-from .forms import UserTimeForm
-from django.db import IntegrityError
+
 import csv
 
 
@@ -25,6 +30,10 @@ def daterange(start_date, end_date):
 # ---------------------------
 # LOGIN / LOGOUT
 # ---------------------------
+# using @csrf_protect this to protect login from errors
+logger = logging.getLogger(__name__)
+@csrf_protect
+@never_cache
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
