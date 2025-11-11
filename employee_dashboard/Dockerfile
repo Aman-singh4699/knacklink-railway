@@ -18,7 +18,6 @@ WORKDIR /app/employee_dashboard
 RUN python manage.py collectstatic --noinput || true
 
 # Expose port
-EXPOSE 8000
 
-# ✅ Start Django using Gunicorn
+EXPOSE 8000
 CMD ["gunicorn", "employee_dashboard.wsgi:application", "--bind", "0.0.0.0:8000"]
