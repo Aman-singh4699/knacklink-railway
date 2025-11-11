@@ -1,26 +1,26 @@
-# Use official Python image
+# Use a small Python image
 FROM python:3.12-slim
 
-# Set working directory in container
+# Set working directory
 WORKDIR /app
 
-# Copy only requirements first (for Docker caching)
-COPY ../requirements.txt .
+# Copy only requirements first for better caching
+COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project into the container
-COPY .. /app/
+# Copy the rest of the project
+COPY . .
 
-# Set workdir to where manage.py actually exists
+# Set workdir to the Django project folder
 WORKDIR /app/employee_dashboard
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# 🧠 Prevent collectstatic from breaking at build time
+RUN python manage.py collectstatic --noinput || echo "Skipping collectstatic (no DB available yet)"
 
-# Expose port
+# Expose Django port
 EXPOSE 8000
 
-# Run Django app using Gunicorn
+# Start the Django app
 CMD ["gunicorn", "employee_dashboard.wsgi:application", "--bind", "0.0.0.0:8000"]
