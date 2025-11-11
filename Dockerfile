@@ -1,26 +1,24 @@
 # Use official Python image
 FROM python:3.12-slim
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Copy dependencies
+# Copy requirements and install
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all project files
-COPY . /app/
+# Copy entire project
+COPY . .
 
-# Set working directory to where manage.py lives
+# Set working directory to the Django project
 WORKDIR /app/employee_dashboard
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput || true
 
-# Expose port for Railway
+# Expose port
 EXPOSE 8000
 
-# Start Django using Gunicorn
+# Start Django with Gunicorn (for Railway)
 CMD ["gunicorn", "employee_dashboard.wsgi:application", "--bind", "0.0.0.0:8000"]
