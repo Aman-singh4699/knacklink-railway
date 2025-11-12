@@ -26,7 +26,7 @@ if RAILWAY_HOSTNAME:
 # Trust the Railway domain for login forms
 CSRF_TRUSTED_ORIGINS = []
 if RAILWAY_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS.append(f"https{RAILWAY_HOSTNAME}")
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_HOSTNAME}")
 
 # APPS
 INSTALLED_APPS = [
